@@ -1,0 +1,109 @@
+
+
+.talking-list {
+    display: flex;
+    flex-wrap: wrap;
+
+    h1 {
+        flex-basis: 100%;
+    }
+
+    .group-list {
+        display: flex;
+        flex-grow: 1;
+        align-items: flex-start;
+        margin: 1rem -0.5rem;
+
+        .group-entry {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            margin: 0 0.5rem;
+            box-shadow: 0 0 0.5rem 0 rgba($color: #c0c0c0, $alpha: 0.7);
+            padding: 0.5rem;
+
+            .group-entry-header {
+                display: flex;
+                flex-basis: 100%;
+                margin: 0 -0.5rem;
+                padding: 0 0.5rem;
+                padding: 0 0.5rem 0.5rem;
+                border-bottom: 1px solid #f0f0f0;
+
+                h3 {
+                    line-height: 2.5rem;
+                }
+                button {
+                    border: 1px solid #e0e0e0;
+                    box-sizing: border-box;
+                    line-height: 2.5rem;
+                }
+            }
+
+            .application-new {
+                display: flex;
+                flex-basis: 100%;
+                padding: 0.5rem;
+                margin: 0 -0.5rem;
+                border-bottom: 1px solid #f0f0f0;
+
+                input {
+                    flex-grow: 1;
+                    box-sizing: border-box;
+                    padding: 0.5rem;
+                    border: 1px solid #e0e0e0;
+                    font-size: 1rem;
+                    margin-right: 0.5rem;
+                }
+                button {
+                    border: 1px solid #e0e0e0;
+                    box-sizing: border-box;
+                    line-height: 2.5rem;
+                }
+                button:hover {
+                    background-color: #e0e0e0;
+                    cursor: pointer;
+                }
+            }
+
+            .application-list {
+                display: flex;
+                flex-wrap: wrap;
+                flex-basis: 100%;
+
+                .application-entry {
+                    display: flex;
+                    flex-basis: 100%;
+                    padding-top: 0.5rem;
+
+                    p {
+                        box-sizing: border-box;
+                        flex-grow: 1;
+                        padding: 0.5rem 0.25rem;
+                        font-size: 1rem;
+                        margin-right: 0.5rem;
+                        line-height: 1.5rem;
+                    }
+                    button {
+                        border: 1px solid #e0e0e0;
+                        box-sizing: border-box;
+                        line-height: 2.5rem;
+                    }
+                    button:hover {
+                        background-color: #e0e0e0;
+                        cursor: pointer;
+                    }
+                }
+            }
+        }
+        .group-entry:last-child {
+            margin-right: 0;
+        }
+    }
+}
+
+.delete-btn:hover {
+    background-color: #e0e0e0;
+    color: red;
+    cursor: pointer;
+}
