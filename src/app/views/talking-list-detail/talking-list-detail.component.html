@@ -1,24 +1,105 @@
 <app-layout>
     <div class="talking-list" *ngIf="list">
-        <h1>{{ list.name }}</h1>
-        <div class="group-list">
-            <div class="group-entry" *ngFor="let group of list.groups">
-                <div class="group-entry-header">
-                    <h3><fa-icon [icon]="faUsers"></fa-icon></h3>
+        <div class="header">
+            <h4>List-O-Matic > <a href="#">Admin</a> > <a href="#">Sitzungen</a> ></h4>
+            <div style="flex-basis: 100%;"></div>
+            <p class="header-icon"><fa-icon [icon]="faChalkboardTeacher"></fa-icon></p>
+            <h1>{{ list.name }}</h1>
+        </div>
+
+        <div class="dash-container">
+            <div class="dash-block dash-block-double">
+                <div class="dash-block-header">
+                    <h3 class="dash-icon"><fa-icon [icon]="faTasks"></fa-icon></h3>
+                    <h3>Vergangene Redebeitr&auml;ge</h3>
                     <div style="flex-grow: 1;"></div>
+                    <button class="delete-btn" (click)="resetContributionDistribution()"><fa-icon [icon]="faRedo"></fa-icon></button>
+                </div>
+                <table class="dash-block-table">
+                    <tr>
+                        <th>Name</th>
+                        <th>Gruppe</th>
+                        <th>Startzeit</th>
+                        <th>Endzeit</th>
+                        <th>Dauer</th>
+                    </tr>
+                    <tr *ngFor="let contrib of list.pastContributions">
+                        <td>{{ contrib.application.name }}</td>
+                        <td>{{ groupNameByUuid(contrib.groupUuid) }}</td>
+                        <td>{{ contrib.startTime.getHours() + ':' + contrib.startTime.getMinutes() + ':' + contrib.startTime.getSeconds() }}</td>
+                        <td>{{ contrib.endTime.getHours() + ':' + contrib.endTime.getMinutes() + ':' + contrib.endTime.getSeconds() }}</td>
+                        <td>{{ fixDecimalFormat(contrib.duration / 1000000000) }} sec</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="dash-block dash-block-double">
+                <div class="dash-block-header">
+                    <h3 class="dash-icon"><fa-icon [icon]="faStopwatch"></fa-icon></h3>
+                    <h3>Redezeitverteilung</h3>
+                    <div style="flex-grow: 1;"></div>
+                </div>
+                <table class="dash-block-table">
+                    <tr>
+                        <th>Gruppe</th>
+                        <th>Anzahl Beitr&auml;ge</th>
+                        <th>Anteil, absolut</th>
+                        <th>Anteil, relativ</th>
+                    </tr>
+                    <tr *ngFor="let group of list.groups">
+                        <td>{{ group.name }}</td>
+                        <td>0</td>
+                        <td>{{ fixDecimalFormat(group.totalTalkingTime / 1000000000) }} sec</td>
+                        <td>{{ fixDecimalFormat(group.talkingTimeShare) }} %</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="dash-container">
+            <div class="dash-block">
+                <div class="dash-block-header">
+                    <h3 class="dash-icon"><fa-icon [icon]="faChalkboardTeacher"></fa-icon></h3>
+                    <h3>Aktueller Redebeitrag</h3>
+                    <div style="flex-grow: 1;"></div>
+                    <button *ngIf="list.currentContribution && list.currentContribution.inProgress" class="delete-btn" (click)="stopContribution()"><fa-icon [icon]="faStop"></fa-icon></button>
+                </div>
+                <p *ngIf="list.currentContribution && list.currentContribution.inProgress" class="current-contribution">
+                    Seit {{ list.currentContribution.startTime.getHours() + ':' + list.currentContribution.startTime.getMinutes() + ':' + list.currentContribution.startTime.getSeconds() }} spricht 
+                    {{ list.currentContribution.application.name }} aus Gruppe {{ groupNameByUuid(list.currentContribution.groupUuid) }}.
+                </p>
+                <p *ngIf="!list.currentContribution || !list.currentContribution.inProgress" class="current-contribution">Es l&auml;ft aktuell kein Beitrag.</p>
+            </div>
+            <div class="dash-block">
+                <div class="dash-block-header">
+                    <h3 class="dash-icon"><fa-icon [icon]="faUsers"></fa-icon></h3>
+                    <h3>Gruppe hinzuf&uuml;gen</h3>
+                    <div style="flex-grow: 1;"></div>
+                </div>
+                <div class="dash-block-input-group" style="padding-bottom: 0;">
+                    <input #groupName type="text" placeholder="Name">
+                    <button (click)="newGroup(groupName.value); groupName.value = '';"><fa-icon [icon]="faPlus"></fa-icon></button>
+                </div>
+            </div>
+            <div style="flex-grow: 1;"></div>
+        </div>
+
+        <div class="dash-container">
+            <div class="group-entry dash-block" *ngFor="let group of list.groups">
+                <div class="dash-block-header">
+                    <h3 class="dash-icon"><fa-icon [icon]="faUsers"></fa-icon></h3>
                     <h3>{{ group.name }}</h3>
                     <div style="flex-grow: 1;"></div>
-                    <button class="delete-btn"><fa-icon [icon]="faTrashAlt"></fa-icon></button>
+                    <button class="delete-btn" (click)="deleteGroup(group.uuid)"><fa-icon [icon]="faTrashAlt"></fa-icon></button>
                 </div>
-                <div class="application-new">
+                <div class="dash-block-input-group application-new">
                     <input #applicationName type="text" placeholder="Name">
                     <button (click)="newApplication(group.uuid, applicationName.value)"><fa-icon [icon]="faPlus"></fa-icon></button>
                 </div>
                 <div class="application-list">
                     <div class="application-entry" *ngFor="let application of group.applications">
                         <p>{{ application.name }}</p>
-                        <button style="margin-right: 0.5rem;"><fa-icon [icon]="faPlay"></fa-icon></button>
-                        <button class="delete-btn"><fa-icon [icon]="faTrashAlt"></fa-icon></button>
+                        <button (click)="startContribution(group.uuid, application.uuid)" style="margin-right: 0.5rem;"><fa-icon [icon]="faPlay"></fa-icon></button>
+                        <button class="delete-btn" (click)="deleteApplication(group.uuid, application.uuid)"><fa-icon [icon]="faTrashAlt"></fa-icon></button>
                     </div>
                 </div>
             </div>

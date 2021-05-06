@@ -1,109 +1,139 @@
-
-
 .talking-list {
     display: flex;
     flex-wrap: wrap;
 
-    h1 {
+    .header {
+        display: flex;
+        flex-wrap: wrap;
         flex-basis: 100%;
+        margin: 0 -1rem 0.5rem;
+        padding: 0 1rem 1rem;
+        border-bottom: 1px solid #c0c0c0;
+
+        h4 {
+            color: #909090;
+            margin-bottom: 0.25rem;
+
+            a {
+                text-decoration: none;
+                color: inherit;
+            }
+            a:hover {
+                text-decoration: underline;
+            }
+        }
+
+        .header-icon {
+            font-size: 1.5rem;
+            line-height: 2.5rem;
+            margin-right: 0.75rem;
+        }
+    
+        h1 {
+            flex-grow: 1;
+        }
     }
 
-    .group-list {
+    .dash-container {
+        flex-basis: 100%;
+
         display: flex;
-        flex-grow: 1;
-        align-items: flex-start;
-        margin: 1rem -0.5rem;
+        flex-wrap: wrap;
+        margin: 0 -0.5rem;
 
-        .group-entry {
+        .dash-block {
             display: flex;
-            flex-direction: column;
-            flex-grow: 1;
-            margin: 0 0.5rem;
-            box-shadow: 0 0 0.5rem 0 rgba($color: #c0c0c0, $alpha: 0.7);
+            flex-basis: 25rem;
+            flex-flow: wrap;
+            align-content: flex-start;
+            margin: 0.5rem;
             padding: 0.5rem;
+            box-shadow: 0 0 0.5rem 0 rgba($color: #c0c0c0, $alpha: 0.7);
 
-            .group-entry-header {
-                display: flex;
+            .dash-block-header {
                 flex-basis: 100%;
+
+                display: flex;
                 margin: 0 -0.5rem;
-                padding: 0 0.5rem;
                 padding: 0 0.5rem 0.5rem;
                 border-bottom: 1px solid #f0f0f0;
 
                 h3 {
                     line-height: 2.5rem;
                 }
-                button {
-                    border: 1px solid #e0e0e0;
-                    box-sizing: border-box;
-                    line-height: 2.5rem;
+                h3.dash-icon {
+                    margin-right: 0.75rem;
                 }
             }
 
-            .application-new {
-                display: flex;
+            .dash-block-input-group {
                 flex-basis: 100%;
-                padding: 0.5rem;
+
+                display: flex;
                 margin: 0 -0.5rem;
-                border-bottom: 1px solid #f0f0f0;
+                padding: 0.5rem;
 
                 input {
                     flex-grow: 1;
-                    box-sizing: border-box;
-                    padding: 0.5rem;
-                    border: 1px solid #e0e0e0;
-                    font-size: 1rem;
                     margin-right: 0.5rem;
                 }
-                button {
-                    border: 1px solid #e0e0e0;
-                    box-sizing: border-box;
-                    line-height: 2.5rem;
-                }
-                button:hover {
-                    background-color: #e0e0e0;
-                    cursor: pointer;
-                }
             }
 
-            .application-list {
+            .dash-block-table {
+                width: 100%;
+                table-layout: fixed;
+                margin-top: 0.5rem;
+                border-collapse: collapse;
+        
+                td, th {
+                    padding: 0.25rem;
+                    text-align: left;
+                    border: 1px solid #f0f0f0;
+                }
+            }
+        }
+
+        .dash-block-double {
+            flex-basis: 52rem;
+        }
+    }
+
+    .current-contribution {
+        padding: 0.5rem 0;
+    }
+
+    .group-entry {
+        .application-new {
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .application-list {
+            display: flex;
+            flex-wrap: wrap;
+            flex-basis: 100%;
+
+            .application-entry {
                 display: flex;
-                flex-wrap: wrap;
                 flex-basis: 100%;
+                padding-top: 0.5rem;
 
-                .application-entry {
-                    display: flex;
-                    flex-basis: 100%;
-                    padding-top: 0.5rem;
-
-                    p {
-                        box-sizing: border-box;
-                        flex-grow: 1;
-                        padding: 0.5rem 0.25rem;
-                        font-size: 1rem;
-                        margin-right: 0.5rem;
-                        line-height: 1.5rem;
-                    }
-                    button {
-                        border: 1px solid #e0e0e0;
-                        box-sizing: border-box;
-                        line-height: 2.5rem;
-                    }
-                    button:hover {
-                        background-color: #e0e0e0;
-                        cursor: pointer;
-                    }
+                p {
+                    box-sizing: border-box;
+                    flex-grow: 1;
+                    padding: 0.5rem 0.25rem;
+                    font-size: 1rem;
+                    margin-right: 0.5rem;
+                    line-height: 1.5rem;
+                    word-break: break-all;
                 }
             }
         }
-        .group-entry:last-child {
-            margin-right: 0;
-        }
+    }
+    .group-entry:last-child {
+        margin-right: 0;
     }
 }
 
 .delete-btn:hover {
-    background-color: #e0e0e0;
     color: red;
-    cursor: pointer;
 }
