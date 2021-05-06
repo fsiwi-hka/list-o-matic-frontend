@@ -4,8 +4,7 @@
 
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:8080',
-  listUuid: '686efb11-41ed-4f6a-bde2-fae32d318009'
+  apiUrl: 'http://localhost:8080'
 };
 
 /*
