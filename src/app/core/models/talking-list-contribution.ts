@@ -1,4 +1,4 @@
-import { TalkingListApplication } from "src/app/talking-list-application";
+import { TalkingListApplication } from "./talking-list-application";
 
 export class TalkingListContribution {
     inProgress: boolean;
