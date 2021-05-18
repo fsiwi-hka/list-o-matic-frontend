@@ -5,6 +5,7 @@ export class TalkingListGroup {
     name: string;
     totalTalkingTime: number;
     talkingTimeShare: number;
+    numberContributions: number;
     applications: TalkingListApplication[];
 
     constructor(uuid: string, name: string) {
@@ -12,6 +13,7 @@ export class TalkingListGroup {
         this.name = name;
         this.totalTalkingTime = 0;
         this.talkingTimeShare = 0;
+        this.numberContributions = 0;
         this.applications = [];
     }
 }

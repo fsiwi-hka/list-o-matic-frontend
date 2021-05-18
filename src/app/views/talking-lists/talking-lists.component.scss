@@ -1,53 +1,53 @@
-
-
-
-
-.list {
-    border-collapse: collapse;
-
-    tr {
-        border-bottom: 1px solid #c0c0c0;
-    }
-    tr:hover {
-        background-color: lightcyan;
-    }
-
-    tr.header-row {
-
-    }
-    tr.header-row:hover {
-        background-color: transparent;
-    }
-
-    td, th {
-        padding: 0.5rem;
-    }
-}
-
-/*
-.list {
-    box-sizing: border-box;
-    display: flex;
-    flex-wrap: wrap;
-    width: 100%;
-
-    .list-row {
-        box-sizing: border-box;
+.talking-lists {
+    .header {
+        display: flex;
+        flex-wrap: wrap;
         flex-basis: 100%;
-        height: 2rem;
-        padding: 0.5rem;
+        margin: 0 -1rem 1rem;
+        padding: 0 1rem 1rem;
         border-bottom: 1px solid #c0c0c0;
-    }
-    .list-row:hover {
-        background-color: lightcyan;
-        cursor: pointer;
+
+        h4 {
+            color: #909090;
+            margin-bottom: 0.25rem;
+
+            a {
+                text-decoration: none;
+                color: inherit;
+            }
+            a:hover {
+                text-decoration: underline;
+            }
+        }
+
+        .header-icon {
+            font-size: 1.5rem;
+            line-height: 2rem;
+            margin-right: 0.75rem;
+        }
+
+        h1 {
+            flex-grow: 1;
+        }
     }
 
-    .header-row {
-    }
-    .header-row:hover {
-        background-color: transparent;
-        cursor: default;
+    .list-table {
+        .list-entry {
+            border-top: 1px solid #c0c0c0;
+            padding: 0.5rem;
+
+            p.list-entry-header {
+                font-size: 1.25rem;
+                font-weight: bold;
+            }
+        }
+        .list-entry:last-child {
+            border-bottom: 1px solid #c0c0c0;
+        }
+
+        .list-entry:hover {
+            background-color: rgba(0, 200, 250, 0.3);
+            cursor: pointer;
+        }
     }
 }
-*/

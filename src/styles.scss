@@ -392,6 +392,7 @@
 
   input, select, textarea {
     padding: 0.5rem;
+    box-sizing: border-box;
     border: 1px solid #e0e0e0;
     font-size: 1rem;
     font-family: Lato, Arial, Helvetica, sans-serif;
@@ -400,7 +401,7 @@
   button {
     border: 1px solid #e0e0e0;
     box-sizing: border-box;
-    line-height: 2.5rem;
+    line-height: 2rem;
   }
   button:hover {
     background-color: #e0e0e0;

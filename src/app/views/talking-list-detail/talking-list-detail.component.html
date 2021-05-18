@@ -1,7 +1,7 @@
 <app-layout>
     <div class="talking-list" *ngIf="list">
         <div class="header">
-            <h4>List-O-Matic > <a href="#">Admin</a> > <a href="#">Sitzungen</a> ></h4>
+            <h4>List-O-Matic > <a href="/lists">Admin</a> > <a href="/lists">Redelisten</a> ></h4>
             <div style="flex-basis: 100%;"></div>
             <p class="header-icon"><fa-icon [icon]="faChalkboardTeacher"></fa-icon></p>
             <h1>{{ list.name }}</h1>
@@ -47,7 +47,7 @@
                     </tr>
                     <tr *ngFor="let group of list.groups">
                         <td>{{ group.name }}</td>
-                        <td>0</td>
+                        <td>{{ group.numberContributions }}</td>
                         <td>{{ fixDecimalFormat(group.totalTalkingTime / 1000000000) }} sec</td>
                         <td>{{ fixDecimalFormat(group.talkingTimeShare) }} %</td>
                     </tr>
@@ -67,7 +67,7 @@
                     Seit {{ list.currentContribution.startTime.getHours() + ':' + list.currentContribution.startTime.getMinutes() + ':' + list.currentContribution.startTime.getSeconds() }} spricht 
                     {{ list.currentContribution.application.name }} aus Gruppe {{ groupNameByUuid(list.currentContribution.groupUuid) }}.
                 </p>
-                <p *ngIf="!list.currentContribution || !list.currentContribution.inProgress" class="current-contribution">Es l&auml;ft aktuell kein Beitrag.</p>
+                <p *ngIf="!list.currentContribution || !list.currentContribution.inProgress" class="current-contribution">Es l&auml;uft aktuell kein Beitrag.</p>
             </div>
             <div class="dash-block">
                 <div class="dash-block-header">

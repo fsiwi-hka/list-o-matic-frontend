@@ -1,43 +1,16 @@
+<app-layout>
+    <div class="talking-lists">
+        <div class="header">
+            <h4>List-O-Matic > <a href="/lists">Admin</a> ></h4>
+            <div style="flex-basis: 100%;"></div>
+            <p class="header-icon"><fa-icon [icon]="faChalkboardTeacher"></fa-icon></p>
+            <h1>Redelisten</h1>
+        </div>
 
-<div class="container">
-    <div class="header">
-
-    </div>
-    <div class="content">
-
-
-        <table class="list">
-            <tr class="header-row">
-                <td><input type="checkbox"></td>
-                <th>Name</th>
-            </tr>
-            <tr>
-                <td><input type="checkbox"></td>
-                <td>lelele</td>
-            </tr>
-        </table>
-
-    <!--
-        <div class="list">
-            <div class="list-row header-row">
-
-            </div>
-            <div class="list-row">
-                alalalalalal
-            </div>
-            <div class="list-row">
-                alalalalalal
-            </div>
-            <div class="list-row">
-                alalalalalal
-            </div>
-            <div class="list-row">
-                alalalalalal
-            </div>
-            <div class="list-row">
-                alalalalalal
+        <div class="list-table">
+            <div class="list-entry" *ngFor="let list of lists" (click)="goToListDetail(list.uuid);">
+                <p class="list-entry-header">{{ list.name }}</p>
             </div>
         </div>
-    -->
     </div>
-</div>
+</app-layout>

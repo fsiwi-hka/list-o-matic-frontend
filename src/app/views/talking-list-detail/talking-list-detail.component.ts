@@ -106,6 +106,15 @@ export class TalkingListDetailComponent implements OnInit {
             }
           });
         });
+        Object.entries(distribution.number_contributions).forEach(distributionEntry => {
+          const groupUuid = distributionEntry[0];
+          const numberContributions = Number(distributionEntry[1]);
+          list.groups.forEach(group => {
+            if (group.uuid === groupUuid) {
+              group.numberContributions = numberContributions;
+            }
+          });
+        });
       });
 
       this.list = list;
