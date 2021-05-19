@@ -28,6 +28,8 @@ export class TalkingListDetailComponent implements OnInit {
   listUuid = '';
   list: TalkingList | undefined;
 
+  adminMode = true;
+
   constructor(
     private route: ActivatedRoute,
     private listApi: ListApiService
@@ -224,7 +226,8 @@ export class TalkingListDetailComponent implements OnInit {
    * @returns Number rounded to 2 decimal points.
    */
   fixDecimalFormat(inp: number): number {
-    return Math.round((inp + Number.EPSILON) * 100) / 100;
+    const newValue = (Math.round((inp + Number.EPSILON) * 100) / 100);
+    return isNaN(newValue) ? 0 : newValue;
   }
 
 }

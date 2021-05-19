@@ -13,7 +13,7 @@
                     <h3 class="dash-icon"><fa-icon [icon]="faTasks"></fa-icon></h3>
                     <h3>Vergangene Redebeitr&auml;ge</h3>
                     <div style="flex-grow: 1;"></div>
-                    <button class="delete-btn" (click)="resetContributionDistribution()"><fa-icon [icon]="faRedo"></fa-icon></button>
+                    <button *ngIf="adminMode" class="delete-btn" (click)="resetContributionDistribution()"><fa-icon [icon]="faRedo"></fa-icon></button>
                 </div>
                 <table class="dash-block-table">
                     <tr>
@@ -61,7 +61,7 @@
                     <h3 class="dash-icon"><fa-icon [icon]="faChalkboardTeacher"></fa-icon></h3>
                     <h3>Aktueller Redebeitrag</h3>
                     <div style="flex-grow: 1;"></div>
-                    <button *ngIf="list.currentContribution && list.currentContribution.inProgress" class="delete-btn" (click)="stopContribution()"><fa-icon [icon]="faStop"></fa-icon></button>
+                    <button *ngIf="adminMode && list.currentContribution && list.currentContribution.inProgress" class="delete-btn" (click)="stopContribution()"><fa-icon [icon]="faStop"></fa-icon></button>
                 </div>
                 <p *ngIf="list.currentContribution && list.currentContribution.inProgress" class="current-contribution">
                     Seit {{ list.currentContribution.startTime.getHours() + ':' + list.currentContribution.startTime.getMinutes() + ':' + list.currentContribution.startTime.getSeconds() }} spricht 
@@ -69,7 +69,7 @@
                 </p>
                 <p *ngIf="!list.currentContribution || !list.currentContribution.inProgress" class="current-contribution">Es l&auml;uft aktuell kein Beitrag.</p>
             </div>
-            <div class="dash-block">
+            <div class="dash-block" *ngIf="adminMode">
                 <div class="dash-block-header">
                     <h3 class="dash-icon"><fa-icon [icon]="faUsers"></fa-icon></h3>
                     <h3>Gruppe hinzuf&uuml;gen</h3>
@@ -89,7 +89,7 @@
                     <h3 class="dash-icon"><fa-icon [icon]="faUsers"></fa-icon></h3>
                     <h3>{{ group.name }}</h3>
                     <div style="flex-grow: 1;"></div>
-                    <button class="delete-btn" (click)="deleteGroup(group.uuid)"><fa-icon [icon]="faTrashAlt"></fa-icon></button>
+                    <button *ngIf="adminMode" class="delete-btn" (click)="deleteGroup(group.uuid)"><fa-icon [icon]="faTrashAlt"></fa-icon></button>
                 </div>
                 <div class="dash-block-input-group application-new">
                     <input #applicationName type="text" placeholder="Name">
@@ -98,8 +98,8 @@
                 <div class="application-list">
                     <div class="application-entry" *ngFor="let application of group.applications">
                         <p>{{ application.name }}</p>
-                        <button (click)="startContribution(group.uuid, application.uuid)" style="margin-right: 0.5rem;"><fa-icon [icon]="faPlay"></fa-icon></button>
-                        <button class="delete-btn" (click)="deleteApplication(group.uuid, application.uuid)"><fa-icon [icon]="faTrashAlt"></fa-icon></button>
+                        <button *ngIf="adminMode" (click)="startContribution(group.uuid, application.uuid)" style="margin-right: 0.5rem;"><fa-icon [icon]="faPlay"></fa-icon></button>
+                        <button *ngIf="adminMode" class="delete-btn" (click)="deleteApplication(group.uuid, application.uuid)"><fa-icon [icon]="faTrashAlt"></fa-icon></button>
                     </div>
                 </div>
             </div>
