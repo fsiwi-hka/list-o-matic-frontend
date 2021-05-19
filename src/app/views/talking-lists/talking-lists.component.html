@@ -1,16 +1,21 @@
 <app-layout>
     <div class="talking-lists">
         <div class="header">
-            <h4>List-O-Matic > <a href="/lists">Admin</a> ></h4>
+            <h4>List-O-Matic > <span *ngIf="adminMode"><a href="/lists">Admin</a> ></span></h4>
             <div style="flex-basis: 100%;"></div>
             <p class="header-icon"><fa-icon [icon]="faChalkboardTeacher"></fa-icon></p>
             <h1>Redelisten</h1>
         </div>
 
-        <div class="list-table">
-            <div class="list-entry" *ngFor="let list of lists" (click)="goToListDetail(list.uuid);">
-                <p class="list-entry-header">{{ list.name }}</p>
-            </div>
-        </div>
+        <app-block-container *ngIf="adminMode">
+            <app-block-element name="Liste hinzufügen" [icon]="faPlus">
+                <app-block-element-input-group placeholder="Name" [icon]="faPlus" (submit)="newList($event);"></app-block-element-input-group>
+            </app-block-element>
+        </app-block-container>
+
+        <app-block-container>
+            <app-block-element [isButton]="true" *ngFor="let list of lists" [name]="list.name" [icon]="faChalkboardTeacher" (click)="goToListDetail(list.uuid);">
+            </app-block-element>
+        </app-block-container>
     </div>
 </app-layout>

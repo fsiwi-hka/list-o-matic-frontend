@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { faChalkboardTeacher } from '@fortawesome/free-solid-svg-icons';
+import { faChalkboardTeacher, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { TalkingList } from 'src/app/core/models/talking-list';
 import { ListApiService } from 'src/app/core/services/list-api.service';
 
@@ -12,8 +12,11 @@ import { ListApiService } from 'src/app/core/services/list-api.service';
 export class TalkingListsComponent implements OnInit {
 
   faChalkboardTeacher = faChalkboardTeacher;
+  faPlus = faPlus;
 
   lists: TalkingList[] = [];
+
+  adminMode = false;
 
   constructor(
     private listApi: ListApiService,
@@ -21,6 +24,10 @@ export class TalkingListsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.refreshLists();
+  }
+
+  refreshLists(): void {
     this.listApi.listGet().subscribe((reply: any) => {
       this.lists = [];
       Object.entries(reply).forEach(listEntry => {
@@ -33,6 +40,12 @@ export class TalkingListsComponent implements OnInit {
 
   goToListDetail(uuid: string) {
     this.router.navigate([`/list/${uuid}`]);
+  }
+
+  newList(name: string) {
+    this.listApi.listPost(name).subscribe(_ => {
+      this.refreshLists();
+    });
   }
 
 }
