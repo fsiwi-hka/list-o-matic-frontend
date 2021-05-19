@@ -1,0 +1,35 @@
+:host {
+    display: flex;
+    flex-basis: 25rem;
+    flex-flow: wrap;
+    align-content: flex-start;
+    margin: 0.5rem;
+    padding: 0.5rem 0.5rem 0 0.5rem;
+    box-shadow: 0 0 0.5rem 0 rgba($color: #c0c0c0, $alpha: 0.7);
+
+    .header {
+        flex-basis: 100%;
+    
+        display: flex;
+        margin: 0 -0.5rem;
+        padding: 0 0.5rem 0.5rem;
+        border-bottom: 1px solid #f0f0f0;
+    
+        h3 {
+            line-height: 2.5rem;
+        }
+        h3.header-icon {
+            margin-right: 0.75rem;
+        }
+    }
+}
+
+:host.is-button {
+    .header {
+        border: 0;
+    }
+}
+:host.is-button:hover {
+    background-color: rgba(0, 200, 250, 0.3);
+    cursor: pointer;
+}
