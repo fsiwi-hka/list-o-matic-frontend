@@ -28,7 +28,7 @@ export class TalkingListDetailComponent implements OnInit {
   listUuid = '';
   list: TalkingList | undefined;
 
-  adminMode = true;
+  adminMode = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -39,6 +39,12 @@ export class TalkingListDetailComponent implements OnInit {
   ngOnInit(): void {
     this.listUuid = this.route.snapshot.paramMap.get('uuid')!;
     this.refreshList();
+
+    this.route.queryParams.subscribe(queryParams => {
+      if (queryParams.adminMode) {
+        this.adminMode = true;
+      }
+    });
   }
 
   /**

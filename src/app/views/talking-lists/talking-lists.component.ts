@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { faChalkboardTeacher, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { TalkingList } from 'src/app/core/models/talking-list';
 import { ListApiService } from 'src/app/core/services/list-api.service';
@@ -19,12 +19,19 @@ export class TalkingListsComponent implements OnInit {
   adminMode = false;
 
   constructor(
+    private route: ActivatedRoute,
     private listApi: ListApiService,
     private router: Router
   ) { }
 
   ngOnInit(): void {
     this.refreshLists();
+
+    this.route.queryParams.subscribe(queryParams => {
+      if (queryParams.adminMode) {
+        this.adminMode = true;
+      }
+    });
   }
 
   refreshLists(): void {
