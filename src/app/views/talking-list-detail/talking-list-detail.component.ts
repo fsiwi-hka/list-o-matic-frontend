@@ -6,6 +6,9 @@ import { TalkingListContribution } from 'src/app/core/models/talking-list-contri
 import { TalkingListGroup } from 'src/app/core/models/talking-list-group';
 import { faArrowCircleLeft, faChalkboardTeacher, faPlay, faPlus, faRedo, faStop, faStopwatch, faTasks, faTrashAlt, faUsers } from '@fortawesome/free-solid-svg-icons';
 import { ActivatedRoute } from '@angular/router';
+import { UserService } from 'src/app/core/services/user.service';
+import { RunningApplicationService } from 'src/app/core/services/running-application.service';
+import { timer } from 'rxjs';
 
 @Component({
   selector: 'app-talking-list-detail',
@@ -27,24 +30,20 @@ export class TalkingListDetailComponent implements OnInit {
 
   listUuid = '';
   list: TalkingList | undefined;
-
-  adminMode = false;
+  previousList = '%';
 
   constructor(
     private route: ActivatedRoute,
-    private listApi: ListApiService
+    private listApi: ListApiService,
+    public userService: UserService,
+    public runningApplications: RunningApplicationService
   ) {
   }
 
   ngOnInit(): void {
     this.listUuid = this.route.snapshot.paramMap.get('uuid')!;
-    this.refreshList();
 
-    this.route.queryParams.subscribe(queryParams => {
-      if (queryParams.adminMode) {
-        this.adminMode = true;
-      }
-    });
+    timer(0, 1000).subscribe(_ => this.refreshList());
   }
 
   /**
@@ -52,6 +51,12 @@ export class TalkingListDetailComponent implements OnInit {
    */
   refreshList(): void {
     this.listApi.listGet(this.listUuid).subscribe((reply: any) => {
+
+      if (this.previousList === JSON.stringify(reply)) {
+        return;
+      }
+      this.previousList = JSON.stringify(reply);
+
       const list = new TalkingList(this.listUuid, reply.name);
 
       if (reply.groups) {
@@ -125,13 +130,30 @@ export class TalkingListDetailComponent implements OnInit {
         });
       });
 
+      if (!this.userService.currentUserIsAdmin()) {
+        const runningApplication = this.runningApplications.getCurrentApplication(this.listUuid);
+        if (runningApplication !== null) {
+          let applicationExists = false;
+          list.groups.forEach(group => {
+            group.applications.forEach(application => {
+              if (application.uuid === runningApplication) {
+                applicationExists = true;
+              }
+            });
+          });
+          if (!applicationExists) {
+            this.runningApplications.deleteApplication(this.listUuid, runningApplication);
+          }
+        }
+      }
+
       this.list = list;
     });
   }
 
   /**
    * Create a new group.
-   * 
+   *
    * @param name The name of the group
    */
   newGroup(name: string) {
@@ -142,7 +164,7 @@ export class TalkingListDetailComponent implements OnInit {
 
   /**
    * Delete a group.
-   * 
+   *
    * @param groupUuid UUID of the group to be deleted.
    */
   deleteGroup(groupUuid: string) {
@@ -153,31 +175,39 @@ export class TalkingListDetailComponent implements OnInit {
 
   /**
    * Create a new application.
-   * 
+   *
    * @param groupUuid UUID of the group to create the application in.
    * @param name The name of the applicant
    */
   newApplication(groupUuid: string, name: string) {
-    this.listApi.applicationPost(this.listUuid, groupUuid, name).subscribe(_ => {
+    this.listApi.applicationPost(this.listUuid, groupUuid, name).subscribe((reply: any) => {
       this.refreshList();
+
+      if (!this.userService.currentUserIsAdmin()) {
+        this.runningApplications.newApplication(this.listUuid, reply.uuid);
+      }
     });
   }
 
   /**
    * Delete an application.
-   * 
+   *
    * @param groupUuid UUID of the group containing the application.
    * @param applicationUuid UUID of the application.
    */
   deleteApplication(groupUuid: string, applicationUuid: string) {
     this.listApi.applicationDelete(this.listUuid, groupUuid, applicationUuid).subscribe(_ => {
       this.refreshList();
+
+      if (!this.userService.currentUserIsAdmin()) {
+        this.runningApplications.deleteApplication(this.listUuid, applicationUuid);
+      }
     });
   }
 
   /**
    * Start a contribution.
-   * 
+   *
    * @param groupUuid UUID of the group containing the application.
    * @param applicationUuid UUID of the application.
    */
@@ -207,7 +237,7 @@ export class TalkingListDetailComponent implements OnInit {
 
   /**
    * Retrieve the name of a group by an UUID.
-   * 
+   *
    * @param uuid UUID of the Group to find
    * @returns The name of the Group or 'N/A'
    */
@@ -227,13 +257,23 @@ export class TalkingListDetailComponent implements OnInit {
 
   /**
    * Fix the representation of a decimal number.
-   * 
+   *
    * @param inp Input number.
    * @returns Number rounded to 2 decimal points.
    */
   fixDecimalFormat(inp: number): number {
     const newValue = (Math.round((inp + Number.EPSILON) * 100) / 100);
     return isNaN(newValue) ? 0 : newValue;
+  }
+
+  /**
+   * Represent a Date object properly.
+   *
+   * @param inp Input date
+   * @returns Time in Date, filled with leading zeroes
+   */
+  prettyDateFormat(inp: Date): string {
+    return `${('0' + inp.getHours()).slice(-2)}:${('0' + inp.getMinutes()).slice(-2)}:${('0' + inp.getSeconds()).slice(-2)}`
   }
 
 }

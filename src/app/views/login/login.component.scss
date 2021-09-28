@@ -1,0 +1,68 @@
+.talking-lists {
+  .header {
+      display: flex;
+      flex-wrap: wrap;
+      flex-basis: 100%;
+      margin: 0 -1rem 1rem;
+      padding: 0 1rem 1rem;
+      border-bottom: 1px solid #c0c0c0;
+
+      h4 {
+          color: #909090;
+          margin-bottom: 0.25rem;
+
+          a {
+              text-decoration: none;
+              color: inherit;
+          }
+          a:hover {
+              text-decoration: underline;
+          }
+      }
+
+      .header-icon {
+          font-size: 1.5rem;
+          line-height: 2rem;
+          margin-right: 0.75rem;
+      }
+
+      h1 {
+          flex-grow: 1;
+      }
+  }
+
+  .list-creation {
+      flex-basis: 100%;
+      margin: 0 -1rem 1rem;
+      padding: 0 1rem 1rem;
+      border-bottom: 1px solid #c0c0c0;
+
+      input {
+          flex-grow: 1;
+          margin-right: 0.5rem;
+      }
+  }
+
+}
+
+.login-input-group {
+  flex-basis: 100%;
+
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 -0.5rem;
+  padding: 0.5rem;
+
+  input {
+    flex-basis: 100%;
+  }
+
+  input:not(:last-child) {
+    margin-bottom: 0.5rem;
+  }
+
+  input[type=submit]:hover {
+    background-color: rgba(0, 200, 250, 0.3);
+    cursor: pointer;
+  }
+}

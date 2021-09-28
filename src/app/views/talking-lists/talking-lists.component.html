@@ -1,16 +1,23 @@
 <app-layout>
     <div class="talking-lists">
         <div class="header">
-            <h4>List-O-Matic > <span *ngIf="adminMode"><a href="/lists">Admin</a> ></span></h4>
+            <h4>List-O-Matic ></h4>
             <div style="flex-basis: 100%;"></div>
             <p class="header-icon"><fa-icon [icon]="faChalkboardTeacher"></fa-icon></p>
             <h1>Redelisten</h1>
         </div>
 
-        <app-block-container *ngIf="adminMode">
-            <app-block-element name="Liste hinzufügen" [icon]="faPlus">
-                <app-block-element-input-group placeholder="Name" [icon]="faPlus" (submit)="newList($event);"></app-block-element-input-group>
-            </app-block-element>
+        <app-block-container>
+          <app-block-element name="Liste hinzufügen" [icon]="faPlus" *ngIf="userService.currentUserIsAdmin()">
+              <app-block-element-input-group placeholder="Name" [icon]="faPlus" (submit)="newList($event);"></app-block-element-input-group>
+          </app-block-element>
+          <app-block-element name="Login" [icon]="faKey" *ngIf="!userService.isLoggedIn()">
+            <app-login></app-login>
+          </app-block-element>
+          <app-block-element name="Nutzer" [icon]="faKey" *ngIf="userService.isLoggedIn()">
+            <p style="padding: 0.5rem 0;">{{ userService.getCurrentUser().username }} ist aktuell angemeldet.</p>
+            <button style="flex-basis: 100%; margin-bottom: 0.5rem;" (click)="router.navigate(['/logout']);">Logout</button>
+          </app-block-element>
         </app-block-container>
 
         <app-block-container>

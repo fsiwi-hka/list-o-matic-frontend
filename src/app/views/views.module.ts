@@ -7,19 +7,26 @@ import { TalkingListDetailComponent } from './talking-list-detail/talking-list-d
 import { SharedModule } from '../shared/shared.module';
 import { CoreModule } from '../core/core.module';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { LoginComponent } from './login/login.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { LogoutComponent } from './logout/logout.component';
 
 
 @NgModule({
   declarations: [
     TalkingListsComponent,
-    TalkingListDetailComponent
+    TalkingListDetailComponent,
+    LoginComponent,
+    LogoutComponent
   ],
   imports: [
     CommonModule,
     ViewsRoutingModule,
     SharedModule,
     CoreModule,
-    FontAwesomeModule
+    FontAwesomeModule,
+    FormsModule,
+    ReactiveFormsModule
   ]
 })
 export class ViewsModule { }
