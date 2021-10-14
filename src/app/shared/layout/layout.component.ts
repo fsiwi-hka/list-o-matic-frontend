@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { IconProp } from '../../../../../../../../../../data/work/HsKA/listomatic/frontend/node_modules/@fortawesome/fontawesome-svg-core';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
 @Component({
   selector: 'app-layout',
@@ -8,10 +8,19 @@ import { IconProp } from '../../../../../../../../../../data/work/HsKA/listomati
 })
 export class LayoutComponent implements OnInit {
 
+  /**
+   * Icon to show in the header of the page
+   */
   @Input() titleIcon: IconProp | null = null;
 
+  /**
+   * Title of this page
+   */
   @Input() title: string = '';
 
+  /**
+   * List of breadcrumbs to show (Name, link)
+   */
   @Input() breadcrumbs: Map<string, string> = new Map<string, string>();
 
   constructor() { }

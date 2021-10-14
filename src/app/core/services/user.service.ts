@@ -75,7 +75,6 @@ export class UserService {
         next: (reply: any) => {
           this.setAccessToken(reply.token);
           this.userInit();
-          console.log(this.currentUser, this.loggedIn);
           observe.next();
           observe.complete();
         },

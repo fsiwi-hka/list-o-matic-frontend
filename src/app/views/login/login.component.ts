@@ -1,6 +1,7 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { faKey } from '@fortawesome/free-solid-svg-icons';
+import { ToastrService } from 'ngx-toastr';
 import { UserService } from 'src/app/core/services/user.service';
 
 @Component({
@@ -10,22 +11,32 @@ import { UserService } from 'src/app/core/services/user.service';
 })
 export class LoginComponent implements OnInit {
 
-  @Output() loginOk = new EventEmitter<void>();
-
   faKey = faKey;
 
+  /**
+   * This will emit an event when a login attempt has succeeded
+   */
+  @Output() loginOk = new EventEmitter<void>();
+
+  /**
+   * Input form group for the login form
+   */
   formGroup = new FormGroup({
     username: new FormControl(''),
     password: new FormControl('')
   });
 
   constructor(
-    private userService: UserService
+    private userService: UserService,
+    private toastr: ToastrService
   ) { }
 
   ngOnInit(): void {
   }
 
+  /**
+   * Do the login process
+   */
   doLogin(): void {
     const username = this.formGroup.value.username;
     const password = this.formGroup.value.password;
@@ -33,10 +44,10 @@ export class LoginComponent implements OnInit {
     this.userService.login(username, password).subscribe({
       next: _ => {
         this.loginOk.emit();
-        console.log('LOGIN OK.');
+        this.toastr.success("Logged in successfully.");
       },
       error: _ => {
-        console.log('LOGIN FAILED.');
+        this.toastr.error("Invalid credentials.");
       }
     });
   }

@@ -170,6 +170,11 @@ export class TalkingListDetailComponent implements OnInit {
     });
   }
 
+  /**
+   * Change the visibility of the current talking list
+   *
+   * @param newVisibility The new visibility (0, 1, 2)
+   */
   changeVisibility(newVisibility: string) {
     this.listApi.listUpdateVisibility(this.listUuid, Number(newVisibility)).subscribe(_ => {
       this.refreshList();

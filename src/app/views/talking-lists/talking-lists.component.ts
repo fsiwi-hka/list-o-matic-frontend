@@ -16,6 +16,9 @@ export class TalkingListsComponent implements OnInit {
   faPlus = faPlus;
   faKey = faKey;
 
+  /**
+   * The current list of known talking lists
+   */
   lists: TalkingList[] = [];
 
   constructor(
@@ -46,7 +49,7 @@ export class TalkingListsComponent implements OnInit {
 
   /**
    * Navigate to the detail page of a list
-   * 
+   *
    * @param uuid UUID of the list to navigate to
    */
   goToListDetail(uuid: string) {
@@ -55,7 +58,7 @@ export class TalkingListsComponent implements OnInit {
 
   /**
    * Create a new talking list
-   * 
+   *
    * @param name The name of the list to be created
    */
   newList(name: string) {
