@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CommonApiService } from './common-api.service';
+import { UserService } from './user.service';
 
 @Injectable({
   providedIn: 'root'
@@ -7,21 +8,29 @@ import { CommonApiService } from './common-api.service';
 export class ListApiService {
 
   constructor(
-    private commonApi: CommonApiService
+    private commonApi: CommonApiService,
+    private userService: UserService
   ) {
   }
 
   /**
    * Retrieve a single talking list or all talking lists known to the backend.
    *
+   * If the currently logged in user is an administrator, retrieve the full list of talking lists
+   *
    * @param uuid If just a single list shall be obtained, provide the list UUID.
    * @returns A HTTP request (Observable)
    */
   public listGet(uuid?: string) {
-    if (uuid) {
-      return this.commonApi.getRequest(`/public/list/${uuid}`);
+    let prefix = 'public';
+    if (this.userService.currentUserIsAdmin()) {
+      prefix = 'protected'
     }
-    return this.commonApi.getRequest('/public/list');
+
+    if (uuid) {
+      return this.commonApi.getRequest(`/${prefix}/list/${uuid}`);
+    }
+    return this.commonApi.getRequest(`/${prefix}/list`);
   }
 
   /**
@@ -44,6 +53,19 @@ export class ListApiService {
    */
   public listDelete(uuid: string) {
     return this.commonApi.deleteRequest(`/protected/list/${uuid}`);
+  }
+
+  /**
+   * Update the visibility of a talking list.
+   *
+   * @param uuid UUID of the talking list to modify
+   * @param newVisibility The new visibility of this talking list (0-2)
+   * @returns A HTTP request (Observable)
+   */
+  public listUpdateVisibility(uuid: string, newVisibility: number) {
+    return this.commonApi.postJSONRequest(`/protected/list/${uuid}/visibility`, {
+      new_visibility: newVisibility
+    });
   }
 
   /**
