@@ -5,6 +5,10 @@ import { BlockContainerComponent } from './block-container/block-container.compo
 import { BlockElementComponent } from './block-container/block-element/block-element.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { BlockElementInputGroupComponent } from './block-container/block-element-input-group/block-element-input-group.component';
+import { BlockElementTableComponent } from './block-container/block-element-table/block-element-table.component';
+import { BlockElementTableRowComponent } from './block-container/block-element-table/block-element-table-row/block-element-table-row.component';
+import { BlockElementTableCellComponent } from './block-container/block-element-table/block-element-table-cell/block-element-table-cell.component';
+import { BlockElementTableHeadingComponent } from './block-container/block-element-table/block-element-table-heading/block-element-table-heading.component';
 
 
 @NgModule({
@@ -12,7 +16,11 @@ import { BlockElementInputGroupComponent } from './block-container/block-element
     LayoutComponent,
     BlockContainerComponent,
     BlockElementComponent,
-    BlockElementInputGroupComponent
+    BlockElementInputGroupComponent,
+    BlockElementTableComponent,
+    BlockElementTableRowComponent,
+    BlockElementTableCellComponent,
+    BlockElementTableHeadingComponent
   ],
   imports: [
     CommonModule,
@@ -22,7 +30,11 @@ import { BlockElementInputGroupComponent } from './block-container/block-element
     LayoutComponent,
     BlockContainerComponent,
     BlockElementComponent,
-    BlockElementInputGroupComponent
+    BlockElementInputGroupComponent,
+    BlockElementTableComponent,
+    BlockElementTableRowComponent,
+    BlockElementTableCellComponent,
+    BlockElementTableHeadingComponent
   ]
 })
 export class SharedModule { }
