@@ -1,18 +1,11 @@
-<app-layout>
+<app-layout title="Redelisten" [titleIcon]="faChalkboardTeacher">
     <div class="talking-lists">
-        <div class="header">
-            <h4>List-O-Matic ></h4>
-            <div style="flex-basis: 100%;"></div>
-            <p class="header-icon"><fa-icon [icon]="faChalkboardTeacher"></fa-icon></p>
-            <h1>Redelisten</h1>
-        </div>
-
         <app-block-container>
           <app-block-element name="Liste hinzufügen" [icon]="faPlus" *ngIf="userService.currentUserIsAdmin()">
               <app-block-element-input-group placeholder="Name" [icon]="faPlus" (submit)="newList($event);"></app-block-element-input-group>
           </app-block-element>
           <app-block-element name="Login" [icon]="faKey" *ngIf="!userService.isLoggedIn()">
-            <app-login></app-login>
+            <app-login (loginOk)="refreshLists();"></app-login>
           </app-block-element>
           <app-block-element name="Nutzer" [icon]="faKey" *ngIf="userService.isLoggedIn()">
             <p style="padding: 0.5rem 0;">{{ userService.getCurrentUser().username }} ist aktuell angemeldet.</p>

@@ -64,7 +64,7 @@ export class ListApiService {
    */
   public listUpdateVisibility(uuid: string, newVisibility: number) {
     return this.commonApi.postJSONRequest(`/protected/list/${uuid}/visibility`, {
-      new_visibility: newVisibility
+      'new_visibility': newVisibility
     });
   }
 

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { faKey } from '@fortawesome/free-solid-svg-icons';
 import { UserService } from 'src/app/core/services/user.service';
@@ -9,6 +9,8 @@ import { UserService } from 'src/app/core/services/user.service';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
+
+  @Output() loginOk = new EventEmitter<void>();
 
   faKey = faKey;
 
@@ -30,6 +32,7 @@ export class LoginComponent implements OnInit {
 
     this.userService.login(username, password).subscribe({
       next: _ => {
+        this.loginOk.emit();
         console.log('LOGIN OK.');
       },
       error: _ => {

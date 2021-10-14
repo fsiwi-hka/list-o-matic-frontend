@@ -4,8 +4,8 @@ import { ListApiService } from 'src/app/core/services/list-api.service';
 import { TalkingListApplication } from 'src/app/core/models/talking-list-application';
 import { TalkingListContribution } from 'src/app/core/models/talking-list-contribution';
 import { TalkingListGroup } from 'src/app/core/models/talking-list-group';
-import { faArrowCircleLeft, faChalkboardTeacher, faPlay, faPlus, faRedo, faStop, faStopwatch, faTasks, faTrashAlt, faUsers } from '@fortawesome/free-solid-svg-icons';
-import { ActivatedRoute } from '@angular/router';
+import { faArrowCircleLeft, faChalkboardTeacher, faPlay, faPlus, faRedo, faStop, faStopwatch, faTasks, faTrashAlt, faUsers, faUsersCog, faWrench } from '@fortawesome/free-solid-svg-icons';
+import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from 'src/app/core/services/user.service';
 import { RunningApplicationService } from 'src/app/core/services/running-application.service';
 import { timer } from 'rxjs';
@@ -27,13 +27,27 @@ export class TalkingListDetailComponent implements OnInit {
   faStopwatch = faStopwatch;
   faStop = faStop;
   faRedo = faRedo;
+  faUsersCog = faUsersCog;
+  faWrench = faWrench;
 
   listUuid = '';
-  list: TalkingList | undefined;
+  list: TalkingList | null = null;
   previousList = '%';
+
+  visibilityEnums: Map<string, number> = new Map<string, number>([
+    ["Privat", 0],
+    ["Nicht gelistet", 1],
+    ["Öffentlich", 2]
+  ]);
+  visibilityLut: Map<number, string> = new Map<number, string>([
+    [0, "Privat"],
+    [1, "Nicht gelistet"],
+    [2, "Öffentlich"]
+  ]);
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private listApi: ListApiService,
     public userService: UserService,
     public runningApplications: RunningApplicationService
@@ -58,6 +72,7 @@ export class TalkingListDetailComponent implements OnInit {
       this.previousList = JSON.stringify(reply);
 
       const list = new TalkingList(this.listUuid, reply.name);
+      list.visibility = reply.visibility;
 
       if (reply.groups) {
         Object.entries(reply.groups).forEach(groupEntry => {
@@ -148,6 +163,21 @@ export class TalkingListDetailComponent implements OnInit {
       }
 
       this.list = list;
+    });
+  }
+
+  changeVisibility(newVisibility: string) {
+    this.listApi.listUpdateVisibility(this.listUuid, Number(newVisibility)).subscribe(_ => {
+      this.refreshList();
+    });
+  }
+
+  /**
+   * Delete the current talking list.
+   */
+  deleteList() {
+    this.listApi.listDelete(this.listUuid).subscribe(_ => {
+      this.router.navigate(['/lists']);
     });
   }
 

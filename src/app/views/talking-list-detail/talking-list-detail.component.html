@@ -1,108 +1,95 @@
-<app-layout>
-    <div class="talking-list" *ngIf="list">
-        <div class="header">
-            <h4>List-O-Matic > <a href="/lists">Redelisten</a> ></h4>
-            <div style="flex-basis: 100%;"></div>
-            <p class="header-icon"><fa-icon [icon]="faChalkboardTeacher"></fa-icon></p>
-            <h1>{{ list.name }}</h1>
-        </div>
+<app-layout [title]="list ? list.name : ''" [titleIcon]="faChalkboardTeacher">
+  <div class="talking-list" *ngIf="list">
+    <app-block-container>
+      <app-block-element name="Vergangene Redebeiträge" [icon]="faTasks" [isDoubleWidth]="true"
+        [hasButton]="userService.currentUserIsAdmin()" [buttonIcon]="faRedo"
+        (buttonClick)="resetContributionDistribution();">
+        <app-block-element-table>
+          <app-block-element-table-row>
+            <app-block-element-table-heading>Name</app-block-element-table-heading>
+            <app-block-element-table-heading>Gruppe</app-block-element-table-heading>
+            <app-block-element-table-heading>Startzeit</app-block-element-table-heading>
+            <app-block-element-table-heading>Endzeit</app-block-element-table-heading>
+            <app-block-element-table-heading>Dauer</app-block-element-table-heading>
+          </app-block-element-table-row>
+          <app-block-element-table-row *ngFor="let contrib of list.pastContributions">
+            <app-block-element-table-cell>{{ contrib.application.name }}</app-block-element-table-cell>
+            <app-block-element-table-cell>{{ groupNameByUuid(contrib.groupUuid) }}</app-block-element-table-cell>
+            <app-block-element-table-cell>{{ prettyDateFormat(contrib.startTime) }}</app-block-element-table-cell>
+            <app-block-element-table-cell>{{ prettyDateFormat(contrib.endTime) }}</app-block-element-table-cell>
+            <app-block-element-table-cell>{{ fixDecimalFormat(contrib.duration / 1000000000) }} sec
+            </app-block-element-table-cell>
+          </app-block-element-table-row>
+        </app-block-element-table>
+      </app-block-element>
+      <app-block-element [isDoubleWidth]="true" name="Redezeitverteilung" [icon]="faStopwatch">
+        <app-block-element-table>
+          <app-block-element-table-row>
+            <app-block-element-table-heading>Gruppe</app-block-element-table-heading>
+            <app-block-element-table-heading>Anzahl Beitr&auml;ge</app-block-element-table-heading>
+            <app-block-element-table-heading>Anteil, absolut</app-block-element-table-heading>
+            <app-block-element-table-heading>Anteil, relativ</app-block-element-table-heading>
+          </app-block-element-table-row>
+          <app-block-element-table-row *ngFor="let group of list.groups">
+            <app-block-element-table-cell>{{ group.name }}</app-block-element-table-cell>
+            <app-block-element-table-cell>{{ group.numberContributions }}</app-block-element-table-cell>
+            <app-block-element-table-cell>{{ fixDecimalFormat(group.totalTalkingTime / 1000000000) }} sec
+            </app-block-element-table-cell>
+            <app-block-element-table-cell>{{ fixDecimalFormat(group.talkingTimeShare) }} %
+            </app-block-element-table-cell>
+          </app-block-element-table-row>
+        </app-block-element-table>
+      </app-block-element>
+    </app-block-container>
 
-        <div class="dash-container">
-            <div class="dash-block dash-block-double">
-                <div class="dash-block-header">
-                    <h3 class="dash-icon"><fa-icon [icon]="faTasks"></fa-icon></h3>
-                    <h3>Vergangene Redebeitr&auml;ge</h3>
-                    <div style="flex-grow: 1;"></div>
-                    <button *ngIf="userService.currentUserIsAdmin()" class="delete-btn" (click)="resetContributionDistribution()"><fa-icon [icon]="faRedo"></fa-icon></button>
-                </div>
-                <table class="dash-block-table">
-                    <tr>
-                        <th>Name</th>
-                        <th>Gruppe</th>
-                        <th>Startzeit</th>
-                        <th>Endzeit</th>
-                        <th>Dauer</th>
-                    </tr>
-                    <tr *ngFor="let contrib of list.pastContributions">
-                        <td>{{ contrib.application.name }}</td>
-                        <td>{{ groupNameByUuid(contrib.groupUuid) }}</td>
-                        <td>{{ prettyDateFormat(contrib.startTime) }}</td>
-                        <td>{{ prettyDateFormat(contrib.endTime) }}</td>
-                        <td>{{ fixDecimalFormat(contrib.duration / 1000000000) }} sec</td>
-                    </tr>
-                </table>
-            </div>
-            <div class="dash-block dash-block-double">
-                <div class="dash-block-header">
-                    <h3 class="dash-icon"><fa-icon [icon]="faStopwatch"></fa-icon></h3>
-                    <h3>Redezeitverteilung</h3>
-                    <div style="flex-grow: 1;"></div>
-                </div>
-                <table class="dash-block-table">
-                    <tr>
-                        <th>Gruppe</th>
-                        <th>Anzahl Beitr&auml;ge</th>
-                        <th>Anteil, absolut</th>
-                        <th>Anteil, relativ</th>
-                    </tr>
-                    <tr *ngFor="let group of list.groups">
-                        <td>{{ group.name }}</td>
-                        <td>{{ group.numberContributions }}</td>
-                        <td>{{ fixDecimalFormat(group.totalTalkingTime / 1000000000) }} sec</td>
-                        <td>{{ fixDecimalFormat(group.talkingTimeShare) }} %</td>
-                    </tr>
-                </table>
-            </div>
-        </div>
+    <app-block-container>
+      <app-block-element name="Aktueller Redebeitrag" [icon]="faChalkboardTeacher"
+        [hasButton]="userService.currentUserIsAdmin() && (list.currentContribution !== undefined) && list.currentContribution.inProgress"
+        [buttonIcon]="faStop" (buttonClick)="stopContribution()">
+        <p *ngIf="list.currentContribution && list.currentContribution.inProgress" class="current-contribution">
+          Seit {{ prettyDateFormat(list.currentContribution.startTime) }} spricht
+          {{ list.currentContribution.application.name }} aus Gruppe {{
+          groupNameByUuid(list.currentContribution.groupUuid) }}.
+        </p>
+        <p *ngIf="!list.currentContribution || !list.currentContribution.inProgress" class="current-contribution" style="margin: 0.5rem 0;">Es
+          l&auml;uft aktuell kein Beitrag.</p>
+      </app-block-element>
+      <app-block-element *ngIf="userService.currentUserIsAdmin()" name="Gruppe hinzufügen" [icon]="faUsers">
+        <app-block-element-input-group placeholder="Name" (submit)="newGroup($event)"></app-block-element-input-group>
+      </app-block-element>
+      <app-block-element *ngIf="userService.currentUserIsAdmin()" name="Liste verwalten" [icon]="faUsersCog">
+        <p style="flex-basis: 100%; margin: 0.5rem 0;">Diese Liste ist aktuell <b>{{ visibilityLut.get(list.visibility) }}</b></p>
+        <select #visibilitySelect style="flex-grow: 1; margin-right: 0.5rem;" [value]="list.visibility">
+          <option value="0">Privat</option>
+          <option value="1">Nicht gelistet</option>
+          <option value="2">&Ouml;ffentlich</option>
+        </select>
+        <button (click)="changeVisibility(visibilitySelect.value)"><fa-icon [icon]="faWrench"></fa-icon></button>
+        <button class="delete-btn" style="flex-basis: 100%; margin: 0.5rem 0;" (click)="deleteList();">Liste l&ouml;schen</button>
+      </app-block-element>
+    </app-block-container>
 
-        <div class="dash-container">
-            <div class="dash-block">
-                <div class="dash-block-header">
-                    <h3 class="dash-icon"><fa-icon [icon]="faChalkboardTeacher"></fa-icon></h3>
-                    <h3>Aktueller Redebeitrag</h3>
-                    <div style="flex-grow: 1;"></div>
-                    <button *ngIf="userService.currentUserIsAdmin() && list.currentContribution && list.currentContribution.inProgress" class="delete-btn" (click)="stopContribution()"><fa-icon [icon]="faStop"></fa-icon></button>
-                </div>
-                <p *ngIf="list.currentContribution && list.currentContribution.inProgress" class="current-contribution">
-                    Seit {{ prettyDateFormat(list.currentContribution.startTime) }} spricht
-                    {{ list.currentContribution.application.name }} aus Gruppe {{ groupNameByUuid(list.currentContribution.groupUuid) }}.
-                </p>
-                <p *ngIf="!list.currentContribution || !list.currentContribution.inProgress" class="current-contribution">Es l&auml;uft aktuell kein Beitrag.</p>
-            </div>
-            <div class="dash-block" *ngIf="userService.currentUserIsAdmin()">
-                <div class="dash-block-header">
-                    <h3 class="dash-icon"><fa-icon [icon]="faUsers"></fa-icon></h3>
-                    <h3>Gruppe hinzuf&uuml;gen</h3>
-                    <div style="flex-grow: 1;"></div>
-                </div>
-                <div class="dash-block-input-group" style="padding-bottom: 0;">
-                    <input #groupName type="text" placeholder="Name">
-                    <button (click)="newGroup(groupName.value); groupName.value = '';"><fa-icon [icon]="faPlus"></fa-icon></button>
-                </div>
-            </div>
-            <div style="flex-grow: 1;"></div>
+    <app-block-container>
+      <app-block-element *ngFor="let group of list.groups" [name]="group.name" [icon]="faUsers"
+        [hasButton]="userService.currentUserIsAdmin()" (buttonClick)="deleteGroup(group.uuid)"
+        [buttonIcon]="faTrashAlt">
+        <app-block-element-input-group placeholder="Name" (submit)="newApplication(group.uuid, $event)" [icon]="faPlus">
+        </app-block-element-input-group>
+        <div class="application-list">
+          <div class="application-entry" *ngFor="let application of group.applications">
+            <p>{{ application.name }}</p>
+            <button *ngIf="userService.currentUserIsAdmin()" (click)="startContribution(group.uuid, application.uuid)"
+              style="margin-right: 0.5rem;">
+              <fa-icon [icon]="faPlay"></fa-icon>
+            </button>
+            <button
+              *ngIf="userService.currentUserIsAdmin() || runningApplications.isOwnApplication(listUuid, application.uuid)"
+              class="delete-btn" (click)="deleteApplication(group.uuid, application.uuid)">
+              <fa-icon [icon]="faTrashAlt"></fa-icon>
+            </button>
+          </div>
         </div>
-
-        <div class="dash-container">
-            <div class="group-entry dash-block" *ngFor="let group of list.groups">
-                <div class="dash-block-header">
-                    <h3 class="dash-icon"><fa-icon [icon]="faUsers"></fa-icon></h3>
-                    <h3>{{ group.name }}</h3>
-                    <div style="flex-grow: 1;"></div>
-                    <button *ngIf="userService.currentUserIsAdmin()" class="delete-btn" (click)="deleteGroup(group.uuid)"><fa-icon [icon]="faTrashAlt"></fa-icon></button>
-                </div>
-                <div class="dash-block-input-group application-new" *ngIf="userService.currentUserIsAdmin() || !runningApplications.hasApplicationActive(listUuid)">
-                    <input #applicationName type="text" placeholder="Name">
-                    <button (click)="newApplication(group.uuid, applicationName.value)"><fa-icon [icon]="faPlus"></fa-icon></button>
-                </div>
-                <div class="application-list">
-                    <div class="application-entry" *ngFor="let application of group.applications">
-                        <p>{{ application.name }}</p>
-                        <button *ngIf="userService.currentUserIsAdmin()" (click)="startContribution(group.uuid, application.uuid)" style="margin-right: 0.5rem;"><fa-icon [icon]="faPlay"></fa-icon></button>
-                        <button *ngIf="userService.currentUserIsAdmin() || runningApplications.isOwnApplication(listUuid, application.uuid)" class="delete-btn" (click)="deleteApplication(group.uuid, application.uuid)"><fa-icon [icon]="faTrashAlt"></fa-icon></button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+      </app-block-element>
+    </app-block-container>
+  </div>
 </app-layout>
