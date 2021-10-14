@@ -41,7 +41,8 @@ export class ListApiService {
    */
   public listPost(name: string) {
     return this.commonApi.postJSONRequest('/protected/list', {
-      name
+      name,
+      'visibility': 2
     });
   }
 
