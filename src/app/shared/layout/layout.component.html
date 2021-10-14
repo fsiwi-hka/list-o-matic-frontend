@@ -1,5 +1,11 @@
 <div class="container">
     <div class="content">
+        <div class="header">
+          <h4>List-O-Matic ></h4>
+          <div style="flex-basis: 100%;"></div>
+          <p *ngIf="titleIcon" class="header-icon"><fa-icon [icon]="titleIcon"></fa-icon></p>
+          <h1>{{ title }}</h1>
+        </div>
         <ng-content></ng-content>
     </div>
 </div>
