@@ -28,6 +28,9 @@ export class TalkingListsComponent implements OnInit {
     this.refreshLists();
   }
 
+  /**
+   * Query the API for the list of avaiable talking lists
+   */
   refreshLists(): void {
     this.listApi.listGet().subscribe((reply: any) => {
       this.lists = [];
@@ -41,10 +44,20 @@ export class TalkingListsComponent implements OnInit {
     });
   }
 
+  /**
+   * Navigate to the detail page of a list
+   * 
+   * @param uuid UUID of the list to navigate to
+   */
   goToListDetail(uuid: string) {
     this.router.navigate([`/list/${uuid}`]);
   }
 
+  /**
+   * Create a new talking list
+   * 
+   * @param name The name of the list to be created
+   */
   newList(name: string) {
     this.listApi.listPost(name).subscribe(_ => {
       this.refreshLists();
