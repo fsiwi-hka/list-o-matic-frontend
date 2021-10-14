@@ -2,6 +2,7 @@
     <div class="content">
         <div class="header">
           <h4>List-O-Matic ></h4>
+          <h4 *ngFor="let breadcrumb of breadcrumbs.entries()" style="margin-left: 0.25rem;"><a [href]="breadcrumb[1]">{{ breadcrumb[0] }}</a> ></h4>
           <div style="flex-basis: 100%;"></div>
           <p *ngIf="titleIcon" class="header-icon"><fa-icon [icon]="titleIcon"></fa-icon></p>
           <h1>{{ title }}</h1>

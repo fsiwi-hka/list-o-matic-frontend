@@ -12,6 +12,8 @@ export class LayoutComponent implements OnInit {
 
   @Input() title: string = '';
 
+  @Input() breadcrumbs: Map<string, string> = new Map<string, string>();
+
   constructor() { }
 
   ngOnInit(): void {
