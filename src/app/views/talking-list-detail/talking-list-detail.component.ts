@@ -34,6 +34,10 @@ export class TalkingListDetailComponent implements OnInit {
   list: TalkingList | null = null;
   previousList = '%';
 
+  breadcrumbs: Map<string, string> = new Map<string, string>([
+    ["Redelisten", "/lists"]
+  ]);
+
   visibilityEnums: Map<string, number> = new Map<string, number>([
     ["Privat", 0],
     ["Nicht gelistet", 1],

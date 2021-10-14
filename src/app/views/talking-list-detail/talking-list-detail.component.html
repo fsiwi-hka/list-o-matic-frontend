@@ -1,4 +1,4 @@
-<app-layout [title]="list ? list.name : ''" [titleIcon]="faChalkboardTeacher">
+<app-layout [title]="list ? list.name : ''" [titleIcon]="faChalkboardTeacher" [breadcrumbs]="breadcrumbs">
   <div class="talking-list" *ngIf="list">
     <app-block-container>
       <app-block-element name="Vergangene Redebeiträge" [icon]="faTasks" [isDoubleWidth]="true"
