@@ -1,2 +1,2 @@
-<input #field type="text" [placeholder]="placeholder">
-<button (click)="submit.emit(field.value); field.value = '';"><fa-icon [icon]="icon"></fa-icon></button>
+<input #field type="text" [placeholder]="placeholder" (keydown)="keyIsEnter($event) ? submitForm(field) : null">
+<button (click)="submitForm(field);"><fa-icon [icon]="icon"></fa-icon></button>

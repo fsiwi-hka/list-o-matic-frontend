@@ -2,5 +2,6 @@
     <h3 class="header-icon"><fa-icon [icon]="icon"></fa-icon></h3>
     <h3>{{ name }}</h3>
     <div style="flex-grow: 1;"></div>
+    <button *ngIf="hasButton" (click)="buttonClick.emit();"><fa-icon [icon]="buttonIcon"></fa-icon></button>
 </div>
 <ng-content></ng-content>

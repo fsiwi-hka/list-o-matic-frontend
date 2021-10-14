@@ -9,12 +9,12 @@
 
     .header {
         flex-basis: 100%;
-    
+
         display: flex;
         margin: 0 -0.5rem;
         padding: 0 0.5rem 0.5rem;
         border-bottom: 1px solid #f0f0f0;
-    
+
         h3 {
             line-height: 2.5rem;
         }
@@ -22,6 +22,10 @@
             margin-right: 0.75rem;
         }
     }
+}
+
+:host.double-width {
+    flex-basis: 52rem;
 }
 
 :host.is-button {

@@ -17,4 +17,13 @@ export class BlockElementInputGroupComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  keyIsEnter(event: KeyboardEvent): boolean {
+    return event.keyCode == 13;
+  }
+
+  submitForm(field: HTMLInputElement) {
+    this.submit.emit(field.value);
+    field.value = '';
+  }
+
 }
