@@ -22,6 +22,7 @@
           </app-block-element-table-row>
         </app-block-element-table>
       </app-block-element>
+
       <app-block-element [isDoubleWidth]="true" name="Redezeitverteilung" [icon]="faStopwatch">
         <app-block-element-table>
           <app-block-element-table-row>
@@ -37,6 +38,32 @@
             </app-block-element-table-cell>
             <app-block-element-table-cell>{{ fixDecimalFormat(group.talkingTimeShare) }} %
             </app-block-element-table-cell>
+          </app-block-element-table-row>
+        </app-block-element-table>
+      </app-block-element>
+
+      <app-block-element name="Anwesenheitsliste" [icon]="faUsers" [isDoubleWidth]="true">
+        <app-block-element-table>
+          <app-block-element-table-row>
+            <app-block-element-table-heading>Vorname</app-block-element-table-heading>
+            <app-block-element-table-heading>Nachname</app-block-element-table-heading>
+            <app-block-element-table-heading>Studiengang</app-block-element-table-heading>
+            <app-block-element-table-heading>E-Mail</app-block-element-table-heading>
+            <app-block-element-table-heading style="width: 30px; border: 0;" *ngIf="userService.currentUserIsAdmin()">&nbsp;</app-block-element-table-heading>
+          </app-block-element-table-row>
+          <app-block-element-table-row *ngIf="userService.currentUserIsAdmin()">
+            <app-block-element-table-cell class="table-input"><input #attendeeGivenName type="text"></app-block-element-table-cell>
+            <app-block-element-table-cell class="table-input"><input #attendeeSurName type="text"></app-block-element-table-cell>
+            <app-block-element-table-cell class="table-input"><input #attendeeDegree type="text"></app-block-element-table-cell>
+            <app-block-element-table-cell class="table-input"><input #attendeeMail type="text"></app-block-element-table-cell>
+            <app-block-element-table-cell class="table-button"><button (click)="addAttendee(attendeeGivenName, attendeeSurName, attendeeDegree, attendeeMail)"><fa-icon [icon]="faPlus"></fa-icon></button></app-block-element-table-cell>
+          </app-block-element-table-row>
+          <app-block-element-table-row *ngFor="let attendee of list.attendees">
+            <app-block-element-table-cell>{{ attendee.givenName }}</app-block-element-table-cell>
+            <app-block-element-table-cell>{{ attendee.surName }}</app-block-element-table-cell>
+            <app-block-element-table-cell>{{ attendee.degree }}</app-block-element-table-cell>
+            <app-block-element-table-cell>{{ attendee.mail }}</app-block-element-table-cell>
+            <app-block-element-table-cell class="table-button table-button-delete" *ngIf="userService.currentUserIsAdmin()"><button (click)="deleteAttendee(attendee.uuid);"><fa-icon [icon]="faTrashAlt"></fa-icon></button></app-block-element-table-cell>
           </app-block-element-table-row>
         </app-block-element-table>
       </app-block-element>
@@ -73,7 +100,7 @@
       <app-block-element *ngFor="let group of list.groups" [name]="group.name" [icon]="faUsers"
         [hasButton]="userService.currentUserIsAdmin()" (buttonClick)="deleteGroup(group.uuid)"
         [buttonIcon]="faTrashAlt">
-        <app-block-element-input-group placeholder="Name" (submit)="newApplication(group.uuid, $event)" [icon]="faPlus">
+        <app-block-element-input-group *ngIf="!runningApplications.hasApplicationActive(listUuid)" placeholder="Name" (submit)="newApplication(group.uuid, $event)" [icon]="faPlus">
         </app-block-element-input-group>
         <div class="application-list">
           <div class="application-entry" *ngFor="let application of group.applications">

@@ -1,3 +1,4 @@
+import { TalkingListAttendee } from "./talking-list-attendee";
 import { TalkingListContribution } from "./talking-list-contribution";
 import { TalkingListGroup } from "./talking-list-group";
 
@@ -6,6 +7,7 @@ export class TalkingList {
     name: string;
     visibility: number;
     groups: TalkingListGroup[];
+    attendees: TalkingListAttendee[];
     currentContribution: TalkingListContribution | undefined;
     pastContributions: TalkingListContribution[];
 
@@ -14,6 +16,7 @@ export class TalkingList {
         this.name = name;
         this.visibility = 2;
         this.groups = [];
+        this.attendees = [];
         this.pastContributions = [];
     }
 }

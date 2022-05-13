@@ -190,4 +190,56 @@ export class ListApiService {
     return this.commonApi.getRequest(`/public/list/${listUuid}/time_distribution`);
   }
 
+  /**
+   * Retrieve a single attendee or all attendees in a list
+   *
+   * @param listUuid UUID of the talking list to use
+   * @param attendeeUuid UUID of the attendee to retrieve
+   * @returns A HTTP request (Observable)
+   */
+   public attendeeGet(listUuid: string, attendeeUuid?: string) {
+    if (attendeeUuid) {
+      return this.commonApi.getRequest(`/protected/list/${listUuid}/attendee/${attendeeUuid}`);
+    }
+    return this.commonApi.getRequest(`/protected/list/${listUuid}/attendee`);
+  }
+
+  /**
+   * Create a new attendee in a list
+   *
+   * @param listUuid UUID of the talking list to use
+   * @param givenName The given name of the attendee
+   * @param surName The surname of the attendee
+   * @param degree The degree of the attendee
+   * @param mail The mail address of the attendee (optional)
+   * @returns A HTTP request (Observable)
+   */
+  public attendeePost(listUuid: string, givenName: string, surName: string, degree: string, mail?: string) {
+    if (mail) {
+      return this.commonApi.postJSONRequest(`/protected/list/${listUuid}/attendee`, {
+        given_name: givenName,
+        sur_name: surName,
+        degree: degree,
+        mail: mail
+      });
+    } else {
+      return this.commonApi.postJSONRequest(`/protected/list/${listUuid}/attendee`, {
+        given_name: givenName,
+        sur_name: surName,
+        degree: degree
+      });
+    }
+  }
+
+  /**
+   * Delete an attendee in a list
+   *
+   * @param listUuid UUID of the talking list to use
+   * @param attendeeUuid The UUID of the attendee
+   * @returns A HTTP request (Observable)
+   */
+  public attendeeDelete(listUuid: string, attendeeUuid: string) {
+    return this.commonApi.deleteRequest(`/protected/list/${listUuid}/attendee/${attendeeUuid}`);
+  }
+
 }

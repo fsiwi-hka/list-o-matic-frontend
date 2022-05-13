@@ -28,3 +28,33 @@
     }
   }
 }
+
+.table-input {
+  padding: 0;
+
+  input {
+    width: 100%;
+    border: 0;
+  }
+}
+
+.table-button {
+  width: 30px;
+  padding: 0;
+
+  button {
+    width: 100%;
+    border: 0;
+    background-color: transparent;
+  }
+  button:hover {
+    background-color: rgba(0, 200, 250, 0.3);
+    cursor: pointer;
+  }
+}
+
+.table-button-delete {
+  button:hover {
+    background-color: rgba(255, 0, 0, 0.3);
+  }
+}

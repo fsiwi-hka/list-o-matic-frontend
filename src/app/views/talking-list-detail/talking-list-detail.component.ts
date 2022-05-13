@@ -9,6 +9,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from 'src/app/core/services/user.service';
 import { RunningApplicationService } from 'src/app/core/services/running-application.service';
 import { timer } from 'rxjs';
+import { TalkingListAttendee } from 'src/app/core/models/talking-list-attendee';
 
 @Component({
   selector: 'app-talking-list-detail',
@@ -99,6 +100,30 @@ export class TalkingListDetailComponent implements OnInit {
         list.groups.sort((a, b) => {
           if (a.name.toLowerCase() < b.name.toLowerCase()) { return -1; }
           if (a.name.toLowerCase() > b.name.toLowerCase()) { return 1; }
+          return 0;
+        });
+      }
+
+      if (reply.attendees) {
+        Object.entries(reply.attendees).forEach(attendeeEntry => {
+          const attendeeUuid = attendeeEntry[0];
+          const attendeeData: any = attendeeEntry[1];
+          const attendee = new TalkingListAttendee(attendeeUuid, attendeeData.given_name, attendeeData.sur_name, attendeeData.degree);
+
+          if (attendeeData.mail) {
+            attendee.mail = attendeeData.mail;
+          }
+
+          list.attendees.push(attendee);
+        });
+
+        list.attendees.sort((a, b) => {
+          if (a.surName.toLowerCase() < b.surName.toLowerCase()) { return -1; }
+          else if (a.surName.toLowerCase() > b.surName.toLowerCase()) { return 1; }
+          else {
+            if (a.givenName.toLowerCase() < b.givenName.toLowerCase()) { return -1; }
+            else if (a.givenName.toLowerCase() > b.givenName.toLowerCase()) { return 1; }
+          }
           return 0;
         });
       }
@@ -313,6 +338,36 @@ export class TalkingListDetailComponent implements OnInit {
    */
   prettyDateFormat(inp: Date): string {
     return `${('0' + inp.getHours()).slice(-2)}:${('0' + inp.getMinutes()).slice(-2)}:${('0' + inp.getSeconds()).slice(-2)}`
+  }
+
+  /**
+   * Add a new attendee
+   *
+   * @param givenName The given name of the attendee, input element
+   * @param surName The surname of the attendee, input element
+   * @param degree The degree of the attendee, input element
+   * @param mail The mail address of the attendee, input element
+   */
+  addAttendee(givenName: HTMLInputElement, surName: HTMLInputElement, degree: HTMLInputElement, mail: HTMLInputElement) {
+    this.listApi.attendeePost(this.listUuid, givenName.value, surName.value, degree.value, mail.value === '' ? undefined : mail.value).subscribe(_ => {
+      this.refreshList();
+    });
+
+    givenName.value = '';
+    surName.value = '';
+    degree.value = '';
+    mail.value = '';
+  }
+
+  /**
+   * Delete an attendee
+   *
+   * @param attendeeUuid The UUID of the attendee
+   */
+  deleteAttendee(attendeeUuid: string) {
+    this.listApi.attendeeDelete(this.listUuid, attendeeUuid).subscribe(_ => {
+      this.refreshList();
+    });
   }
 
 }
