@@ -242,4 +242,14 @@ export class ListApiService {
     return this.commonApi.deleteRequest(`/protected/list/${listUuid}/attendee/${attendeeUuid}`);
   }
 
+  /**
+   * Retrieve a markdown report of a list
+   *
+   * @param listUuid UUID of the talking list to use
+   * @returns A HTTP request (Observable)
+   */
+  public generateReport(listUuid: string) {
+    return this.commonApi.getBlobRequest(`/protected/list/${listUuid}/mdreport`);
+  }
+
 }

@@ -36,6 +36,27 @@ export class CommonApiService {
   }
 
   /**
+   * Creates a HTTP GET request to the provided URI.
+   *
+   * @param uri The destination URI
+   * @returns HTTP Request (Observable)
+   */
+  public getBlobRequest(uri: string) {
+    return new Observable(subscribe => {
+      this.http.get(encodeURI(environment.apiUrl + uri), {
+        headers: new HttpHeaders({
+          'Authorization': `Bearer ${this.userService.getAccessToken()}`
+        }),
+        responseType: 'blob'
+      }).subscribe({
+        next: data => subscribe.next(data),
+        error: error => subscribe.error(error),
+        complete: () => subscribe.complete()
+      });
+    });
+  }
+
+  /**
    * Creates a HTTP POST request to the provided URI containing JSON data.
    *
    * @param uri The destination URI

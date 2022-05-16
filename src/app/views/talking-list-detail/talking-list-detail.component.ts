@@ -1,15 +1,17 @@
 import { Component, OnInit } from '@angular/core';
+import { Clipboard } from '@angular/cdk/clipboard';
 import { TalkingList } from 'src/app/core/models/talking-list';
 import { ListApiService } from 'src/app/core/services/list-api.service';
 import { TalkingListApplication } from 'src/app/core/models/talking-list-application';
 import { TalkingListContribution } from 'src/app/core/models/talking-list-contribution';
 import { TalkingListGroup } from 'src/app/core/models/talking-list-group';
-import { faArrowCircleLeft, faChalkboardTeacher, faPlay, faPlus, faRedo, faStop, faStopwatch, faTasks, faTrashAlt, faUsers, faUsersCog, faWrench } from '@fortawesome/free-solid-svg-icons';
+import { faArrowCircleLeft, faChalkboardTeacher, faCopy, faPlay, faPlus, faRedo, faStop, faStopwatch, faTasks, faTrashAlt, faUsers, faUsersCog, faWrench } from '@fortawesome/free-solid-svg-icons';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from 'src/app/core/services/user.service';
 import { RunningApplicationService } from 'src/app/core/services/running-application.service';
 import { timer } from 'rxjs';
 import { TalkingListAttendee } from 'src/app/core/models/talking-list-attendee';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-talking-list-detail',
@@ -30,6 +32,7 @@ export class TalkingListDetailComponent implements OnInit {
   faRedo = faRedo;
   faUsersCog = faUsersCog;
   faWrench = faWrench;
+  faCopy = faCopy;
 
   listUuid = '';
   list: TalkingList | null = null;
@@ -55,7 +58,8 @@ export class TalkingListDetailComponent implements OnInit {
     private router: Router,
     private listApi: ListApiService,
     public userService: UserService,
-    public runningApplications: RunningApplicationService
+    public runningApplications: RunningApplicationService,
+    private clipboard: Clipboard
   ) {
   }
 
@@ -368,6 +372,25 @@ export class TalkingListDetailComponent implements OnInit {
     this.listApi.attendeeDelete(this.listUuid, attendeeUuid).subscribe(_ => {
       this.refreshList();
     });
+  }
+
+  /**
+   * Download a markdown report
+   */
+  downloadReport() {
+    this.listApi.generateReport(this.listUuid).subscribe(reply => {
+      saveAs(reply as Blob, "report.md");
+    });
+  }
+
+  copyAttendeeListToClipboard() {
+    if (this.list) {
+      const attendees: string[] = [];
+      this.list.attendees.forEach(attendee => {
+        attendees.push(`${attendee.givenName} ${attendee.surName}`);
+      });
+      this.clipboard.copy(attendees.join(', '));
+    }
   }
 
 }

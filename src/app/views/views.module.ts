@@ -26,7 +26,7 @@ import { LogoutComponent } from './logout/logout.component';
     CoreModule,
     FontAwesomeModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ]
 })
 export class ViewsModule { }

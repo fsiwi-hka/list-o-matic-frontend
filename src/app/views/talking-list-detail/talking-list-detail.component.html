@@ -42,7 +42,7 @@
         </app-block-element-table>
       </app-block-element>
 
-      <app-block-element name="Anwesenheitsliste" [icon]="faUsers" [isDoubleWidth]="true">
+      <app-block-element name="Anwesenheitsliste" [icon]="faUsers" [isDoubleWidth]="true" [hasButton]="true" [buttonIcon]="faCopy" (buttonClick)="copyAttendeeListToClipboard();">
         <app-block-element-table>
           <app-block-element-table-row>
             <app-block-element-table-heading>Vorname</app-block-element-table-heading>
@@ -93,6 +93,7 @@
         </select>
         <button (click)="changeVisibility(visibilitySelect.value)"><fa-icon [icon]="faWrench"></fa-icon></button>
         <button class="delete-btn" style="flex-basis: 100%; margin: 0.5rem 0;" (click)="deleteList();">Liste l&ouml;schen</button>
+        <button style="flex-basis: 100%; margin: 0 0 0.5rem 0;" (click)="downloadReport()">Report erstellen</button>
       </app-block-element>
     </app-block-container>
 
